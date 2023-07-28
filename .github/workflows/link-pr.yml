@@ -11,4 +11,16 @@ jobs:
       - name: Update issue
         run: |
             prNumber=$(jq -r '.number' "$GITHUB_EVENT_PATH")
+            prBody=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH")
+            
             echo "PR: $prNumber"
+            echo "Body: $prBody"
+
+            issueNumber=$(echo "$prBody" | grep -oP 'Issue: #\K\d+')
+            
+            if [ -z "$issueNumber" ]; then
+              echo "Issue number not found in the pull request description."
+            else
+              echo "Issue: $issueNumber"
+            fi
+
