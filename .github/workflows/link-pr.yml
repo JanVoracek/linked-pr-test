@@ -23,4 +23,6 @@ jobs:
             else
               echo "Issue: $issueNumber"
             fi
+            
+            gh -R $GITHUB_REPOSITORY issue view $issueNumber --json body -q '.body'
 
