@@ -1,0 +1,14 @@
+name: Link PR to Issue
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run a one-line script
+        run: echo Hello, world!
