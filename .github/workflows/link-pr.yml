@@ -16,7 +16,7 @@ jobs:
             echo "PR: $prNumber"
             echo "Body: $prBody"
 
-            issueNumber=$(echo "$prBody" | grep -oP 'Issue: #\K\d+')
+            issueNumber=$(echo "$prBody" | grep -oP 'Issue: #\K\d+' || echo "")
             
             if [ -z "$issueNumber" ]; then
               echo "Issue number not found in the pull request description."
