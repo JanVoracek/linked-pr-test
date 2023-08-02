@@ -8,7 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: "0.7.0"
       - name: Update issue
         env:
           GH_TOKEN: ${{ github.token }}
-        run: node .github/workflows/link-pr/link-pr.js
+        run: bun run .github/workflows/link-pr/action.ts
