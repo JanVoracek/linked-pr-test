@@ -5,4 +5,5 @@ on:
 
 jobs:
   natoc-zmrzlinu:
-    run: echo "🍦"
+    steps:
+      - run: echo "🍦"
