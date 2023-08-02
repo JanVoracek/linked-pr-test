@@ -1,0 +1,11 @@
+name: Link PR to Issue
+
+on:
+  workflow_dispatch:
+    inputs: {}
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: .github/workflows/reusable/natoc-zmrzlinu.yaml
