@@ -1,4 +1,4 @@
-name: Link PR to Issue
+name: Use reusable workflow
 
 on:
   workflow_dispatch:
