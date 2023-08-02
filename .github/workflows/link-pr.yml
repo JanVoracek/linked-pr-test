@@ -3,6 +3,8 @@ name: Link PR to Issue
 on:
   pull_request:
     types: [ opened, edited ]
+  workflow_dispatch:
+    inputs: []
 jobs:
   link:
     runs-on: ubuntu-latest
@@ -11,20 +13,4 @@ jobs:
       - name: Update issue
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-            prNumber=$(jq -r '.number' "$GITHUB_EVENT_PATH")
-            prBody=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH")
-            
-            echo "PR: $prNumber"
-            echo "Body: $prBody"
-
-            issueNumber=$(echo "$prBody" | grep -oP 'Issue: #\K\d+' || echo "")
-            
-            if [ -z "$issueNumber" ]; then
-              echo "Issue number not found in the pull request description."
-            else
-              echo "Issue: $issueNumber"
-            fi
-            
-            gh -R $GITHUB_REPOSITORY issue view $issueNumber --json body -q '.body'
-
+        run: node .github/workflows/link-pr/link-pr.js
