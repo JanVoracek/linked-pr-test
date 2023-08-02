@@ -1,10 +1,11 @@
 name: Link PR to Issue
 
 on:
-  # pull_request:
-  #   types: [ opened, edited ]
   workflow_dispatch:
-    inputs: []
+    inputs:
+      name:
+        description: "Who to greet"
+        default: "World"
 jobs:
   link:
     runs-on: ubuntu-latest
