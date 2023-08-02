@@ -1,9 +1,0 @@
-name: Natoc zmrzlinu
-
-on:
-  workflow_call:
-
-jobs:
-  natoc-zmrzlinu:
-    steps:
-      - run: echo "🍦"
