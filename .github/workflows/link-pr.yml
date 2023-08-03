@@ -13,5 +13,5 @@ jobs:
           bun-version: "0.7.0"
       - name: Update issue
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: bun run .github/workflows/link-pr/action.ts
