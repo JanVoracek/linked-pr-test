@@ -32,12 +32,17 @@ export class IssuePullRequestLinker {
       });
 
       const issueBody = parseIssueBody(response.data.body ?? '');
+      const issueEtag = response.headers.etag;
+
       issueBody.linkedPrs[operation](prNumber);
 
       await this.octokit.rest.issues.update({
         issue_number: issueNumber,
         owner: this.repo.owner,
         repo: this.repo.repo,
+        headers: {
+          'If-Match': issueEtag,
+        },
         body: formatIssueBody(issueBody),
       });
     });
