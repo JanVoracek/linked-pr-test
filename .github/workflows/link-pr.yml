@@ -2,7 +2,7 @@ name: Link PR to Issue
 
 on:
   pull_request:
-    types: [ opened, edited ]
+    types: [ opened, edited, connected ]
 permissions:
   issues: write
 jobs:
