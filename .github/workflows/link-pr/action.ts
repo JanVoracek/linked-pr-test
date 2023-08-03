@@ -10,6 +10,8 @@ const issueReferencePattern = /^Issue: #(\d+)\s*$/m;
 const issueNumber = parseInt(pr.body?.match(issueReferencePattern)?.[1]!, 10) || undefined;
 const previousIssueNumber = parseInt(changes?.body?.from?.match(issueReferencePattern)?.[1]!, 10) || undefined;
 
+console.log(github.context.payload);
+
 if (!issueNumber && !previousIssueNumber) {
   console.log('Issue number not found in the pull request description.');
   process.exit(0);
