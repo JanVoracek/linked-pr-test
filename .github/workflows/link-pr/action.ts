@@ -70,7 +70,7 @@ async function updateLinkedPrs(issueNumber: number, prNumber: number, operation:
     repo: github.context.repo.repo,
   });
 
-  const issueBody = parseIssueBody(response.data.body!);
+  const issueBody = parseIssueBody(response.data.body ?? '');
   issueBody.linkedPrs[operation](prNumber);
 
   await octokit.rest.issues.update({
