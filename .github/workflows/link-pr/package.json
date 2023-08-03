@@ -3,10 +3,14 @@
     "module": "action.ts",
     "type": "module",
     "devDependencies": {
+      "@types/common-tags": "^1.8.1",
       "bun-types": "latest"
     },
     "peerDependencies": {
       "typescript": "^5.0.0"
+    },
+    "dependencies": {
+      "@actions/github": "^5.1.1",
+      "common-tags": "^1.8.2"
     }
   }
-  
