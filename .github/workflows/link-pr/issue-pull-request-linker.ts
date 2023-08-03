@@ -1,5 +1,7 @@
 import { stripIndent } from 'common-tags';
 import type github from '@actions/github';
+import { retry, handleWhen } from 'cockatiel';
+import { RequestError } from '@octokit/request-error';
 
 export type IssueBody = { description: string; linkedPrs: Set<number> };
 
@@ -13,24 +15,31 @@ const linkedPrsHeader = stripIndent`
     **Linked PRs:**
 `.replaceAll('\n', '\r\n');
 
+const retryPolicy = retry(
+  handleWhen(e => e instanceof RequestError),
+  { maxAttempts: 3 }
+);
+
 export class IssuePullRequestLinker {
   constructor(private octokit: Octokit, private repo: Repo) {}
 
   async updateLinkedPullRequestsForIssue(issueNumber: number, prNumber: number, operation: 'add' | 'delete') {
-    const response = await this.octokit.rest.issues.get({
-      issue_number: issueNumber,
-      owner: this.repo.owner,
-      repo: this.repo.repo,
-    });
+    await retryPolicy.execute(async () => {
+      const response = await this.octokit.rest.issues.get({
+        issue_number: issueNumber,
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+      });
 
-    const issueBody = parseIssueBody(response.data.body ?? '');
-    issueBody.linkedPrs[operation](prNumber);
+      const issueBody = parseIssueBody(response.data.body ?? '');
+      issueBody.linkedPrs[operation](prNumber);
 
-    await this.octokit.rest.issues.update({
-      issue_number: issueNumber,
-      owner: this.repo.owner,
-      repo: this.repo.repo,
-      body: formatIssueBody(issueBody),
+      await this.octokit.rest.issues.update({
+        issue_number: issueNumber,
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+        body: formatIssueBody(issueBody),
+      });
     });
   }
 }
