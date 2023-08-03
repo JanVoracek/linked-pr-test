@@ -53,10 +53,14 @@ function parseIssueBody(issueBody: string): IssueBody {
 }
 
 function formatIssueBody(issue: IssueBody): string {
-  const sortedPrs = [...issue.linkedPrs].sort((a, b) => a - b);
-  const linkedPrs = sortedPrs.map(pr => `- PR #${pr}`).join('\r\n');
-
-  return `${issue.description}\r\n\r\n${linkedPrsHeader}\r\n\r\n${linkedPrs}`;
+    const sortedPrs = [...issue.linkedPrs].sort((a, b) => a - b);
+    const linkedPrs = sortedPrs.map(pr => `- PR #${pr}`).join('\r\n');
+  
+    if (sortedPrs.length === 0) {
+      return issue.description;
+    }
+  
+    return `${issue.description}\r\n\r\n${linkedPrsHeader}\r\n\r\n${linkedPrs}`;
 }
 
 async function updateLinkedPrs(issueNumber: number, prNumber: number, operation: 'add' | 'delete') {
