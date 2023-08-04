@@ -2,12 +2,13 @@ name: Link PR to Issue
 
 on:
   pull_request:
-    types: [ opened, edited, connected, disconnected ]
+    types: [ opened, edited ]
 permissions:
   issues: write
 jobs:
   link:
     runs-on: ubuntu-latest
+    timeout-minutes: 1
     steps:
       - uses: actions/checkout@v3
       - uses: oven-sh/setup-bun@v1
