@@ -15,6 +15,7 @@ jobs:
         with:
           bun-version: '0.7.0'
       - run: bun i --verbose
+        working-directory: .github/workflows/link-pr
       - name: Update issue
         env:
           GITHUB_TOKEN: ${{ github.token }}
