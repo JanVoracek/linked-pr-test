@@ -25,6 +25,7 @@ export class IssuePullRequestLinker {
 
   async updateLinkedPullRequestsForIssue(issueNumber: number, prNumber: number, operation: 'add' | 'delete') {
     await retryPolicy.execute(async () => {
+      console.log('Reading issue...');
       const response = await this.octokit.rest.issues.get({
         issue_number: issueNumber,
         owner: this.repo.owner,
@@ -36,6 +37,7 @@ export class IssuePullRequestLinker {
 
       issueBody.linkedPrs[operation](prNumber);
 
+      console.log('Writing issue...');
       await this.octokit.rest.issues.update({
         issue_number: issueNumber,
         owner: this.repo.owner,
