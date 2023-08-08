@@ -19,7 +19,7 @@ const linkingKeywords = [
 ] as const;
 
 // https://regex101.com/r/LLv7xP/1
-const issueReferencePattern = new RegExp(`^(?:${linkingKeywords.join('|')}):? #(\d+)\s*$`, 'mi');
+const issueReferencePattern = new RegExp(`^(?:${linkingKeywords.join('|')}):? #(\\d+)\\s*$`, 'mi');
 console.log(issueReferencePattern);
 
 const issueNumber = parseInt(pr.body?.match(issueReferencePattern)?.[1]!, 10) || undefined;
