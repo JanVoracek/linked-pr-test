@@ -32,7 +32,7 @@ export class IssuePullRequestLinker {
       });
 
       const issueBody = parseIssueBody(response.data.body ?? '');
-      const issueEtag = response.headers.etag!.slice(2); // Remove the "weak etag" prefix
+      const issueEtag = response.headers.etag!.split('/')[1]; // Remove the "weak etag" prefix
 
       issueBody.linkedPrs[operation](prNumber);
 
