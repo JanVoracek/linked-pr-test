@@ -17,5 +17,5 @@ jobs:
       - name: Update issue
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: bun run action.ts
+        run: bun i -p && bun run action.ts
         working-directory: .github/workflows/link-pr 
