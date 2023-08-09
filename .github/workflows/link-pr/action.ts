@@ -20,7 +20,6 @@ const linkingKeywords = [
 
 // https://regex101.com/r/LLv7xP/1
 const issueReferencePattern = new RegExp(`^(?:${linkingKeywords.join('|')}):? #(\\d+)\\s*$`, 'mi');
-console.log(issueReferencePattern);
 
 const issueNumber = parseInt(pr.body?.match(issueReferencePattern)?.[1]!, 10) || undefined;
 const previousIssueNumber = parseInt(changes?.body?.from?.match(issueReferencePattern)?.[1]!, 10) || undefined;

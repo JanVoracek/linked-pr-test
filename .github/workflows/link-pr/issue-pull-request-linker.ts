@@ -62,8 +62,8 @@ function parseIssueBody(issueBody: string): IssueBody {
   const description = issueBody.slice(0, linkedPrsHeaderIndex).trimEnd();
   const linkedPrsList = issueBody.slice(linkedPrsHeaderIndex + linkedPrsHeader.length);
 
-  // https://regex101.com/r/QxqEIk/1
-  const linkedPrs = [...linkedPrsList.matchAll(/^- PR #(\d+)/gm)].map(match => parseInt(match[1]!, 10));
+  // https://regex101.com/r/RRq7OJ/1
+  const linkedPrs = [...linkedPrsList.matchAll(/^- #(\d+)/gm)].map(match => parseInt(match[1]!, 10));
 
   return {
     description,
@@ -73,7 +73,7 @@ function parseIssueBody(issueBody: string): IssueBody {
 
 function formatIssueBody(issue: IssueBody): string {
   const sortedPrs = [...issue.linkedPrs].sort((a, b) => a - b);
-  const linkedPrs = sortedPrs.map(pr => `- PR #${pr}`).join('\r\n');
+  const linkedPrs = sortedPrs.map(pr => `- #${pr}`).join('\r\n');
 
   if (sortedPrs.length === 0) {
     return issue.description;
