@@ -32,8 +32,7 @@ export class IssuePullRequestLinker {
       });
 
       const issueBody = parseIssueBody(response.data.body ?? '');
-      const issueEtag = response.headers.etag!.slice(3, -1); // Extract etag value from "weak etag"
-      console.log('etag', issueEtag);
+      const lastModified = response.headers['last-modified'];
 
       issueBody.linkedPrs[operation](prNumber);
 
@@ -42,7 +41,7 @@ export class IssuePullRequestLinker {
         owner: this.repo.owner,
         repo: this.repo.repo,
         headers: {
-          'If-Match': issueEtag,
+          'If-Unmodified-Since': lastModified,
         },
         body: formatIssueBody(issueBody),
       });
