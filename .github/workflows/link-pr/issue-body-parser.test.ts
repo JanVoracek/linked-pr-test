@@ -1,45 +1,44 @@
-/// <reference types="bun-types" />
-
-import { describe, expect, test } from 'bun:test';
-import { IssueBody, formatIssueBody, parseIssueBody } from './issue-body-parser';
-import { stripIndent } from 'common-tags';
+import { describe, it } from 'https://deno.land/std@0.216.0/testing/bdd.ts';
+import { assertEquals } from 'https://deno.land/std@0.216.0/assert/mod.ts';
+import { IssueBody, formatIssueBody, parseIssueBody } from './issue-body-parser.ts';
+import { stripIndent } from 'npm:common-tags@1.8.2';
 
 export const issueDescription = (str: string) => stripIndent(str).replaceAll('\n', '\r\n');
 
 describe('parseIssueBody', () => {
-  test('issue without description', () => {
+  it('issue without description', () => {
     const description = '';
-    expect(parseIssueBody(description)).toEqual({
+    assertEquals(parseIssueBody(description), {
       description: { before: '', after: '' },
       linkedPrs: new Set(),
     });
   });
 
-  test('issue without linked PRs', () => {
+  it('issue without linked PRs', () => {
     const description = issueDescription(`
       Some multiline
       description`);
 
-    expect(parseIssueBody(description)).toEqual({
+    assertEquals(parseIssueBody(description), {
       description: { before: description, after: '' },
       linkedPrs: new Set(),
     });
   });
 
-  test('issue with single linked PR', () => {
+  it('issue with single linked PR', () => {
     const description = issueDescription(`
       \`\`\`[tasklist]
       ### Linked PRs:
       - [ ] #123
       \`\`\``);
 
-    expect(parseIssueBody(description)).toEqual({
+    assertEquals(parseIssueBody(description), {
       description: { before: '', after: '' },
       linkedPrs: new Set([123]),
     });
   });
 
-  test('issue with multiple linked PRs', () => {
+  it('issue with multiple linked PRs', () => {
     const description = issueDescription(`
       \`\`\`[tasklist]
       ### Linked PRs:
@@ -48,13 +47,13 @@ describe('parseIssueBody', () => {
       - [x] #369
       \`\`\``);
 
-    expect(parseIssueBody(description)).toEqual({
+    assertEquals(parseIssueBody(description), {
       description: { before: '', after: '' },
       linkedPrs: new Set([123, 246, 369]),
     });
   });
 
-  test('issue with description before linked PRs', () => {
+  it('issue with description before linked PRs', () => {
     const description = issueDescription(`
       Some multiline
       description
@@ -66,13 +65,13 @@ describe('parseIssueBody', () => {
       - [x] #369
       \`\`\``);
 
-    expect(parseIssueBody(description)).toEqual({
+    assertEquals(parseIssueBody(description), {
       description: { before: 'Some multiline\r\ndescription', after: '' },
       linkedPrs: new Set([123, 246, 369]),
     });
   });
 
-  test('issue with description after linked PRs', () => {
+  it('issue with description after linked PRs', () => {
     const description = issueDescription(`
       \`\`\`[tasklist]
       ### Linked PRs:
@@ -84,13 +83,13 @@ describe('parseIssueBody', () => {
       Some multiline
       description`);
 
-    expect(parseIssueBody(description)).toEqual({
+    assertEquals(parseIssueBody(description), {
       description: { before: '', after: 'Some multiline\r\ndescription' },
       linkedPrs: new Set([123, 246, 369]),
     });
   });
 
-  test('issue with description before and after linked PRs', () => {
+  it('issue with description before and after linked PRs', () => {
     const description = issueDescription(`
       Some multiline
       description
@@ -105,7 +104,7 @@ describe('parseIssueBody', () => {
       Another multiline
       description`);
 
-    expect(parseIssueBody(description)).toEqual({
+    assertEquals(parseIssueBody(description), {
       description: { before: 'Some multiline\r\ndescription', after: 'Another multiline\r\ndescription' },
       linkedPrs: new Set([123, 246, 369]),
     });
@@ -113,15 +112,15 @@ describe('parseIssueBody', () => {
 });
 
 describe('formatIssueBody', () => {
-  test('issue without description', () => {
+  it('issue without description', () => {
     const issueBody: IssueBody = {
       description: { before: '', after: '' },
       linkedPrs: new Set(),
     };
-    expect(formatIssueBody(issueBody)).toEqual('');
+    assertEquals(formatIssueBody(issueBody), '');
   });
 
-  test('issue without linked PRs', () => {
+  it('issue without linked PRs', () => {
     const description = issueDescription(`
       Some multiline
       description`);
@@ -130,10 +129,10 @@ describe('formatIssueBody', () => {
       linkedPrs: new Set(),
     };
 
-    expect(formatIssueBody(issueBody)).toEqual(description);
+    assertEquals(formatIssueBody(issueBody), description);
   });
 
-  test('issue with single linked PR', () => {
+  it('issue with single linked PR', () => {
     const description = issueDescription(`
       \`\`\`[tasklist]
       ### Linked PRs:
@@ -144,10 +143,10 @@ describe('formatIssueBody', () => {
       linkedPrs: new Set([123]),
     };
 
-    expect(formatIssueBody(issueBody)).toEqual(description);
+    assertEquals(formatIssueBody(issueBody), description);
   });
 
-  test('issue with multiple linked PRs', () => {
+  it('issue with multiple linked PRs', () => {
     const description = issueDescription(`
       \`\`\`[tasklist]
       ### Linked PRs:
@@ -160,10 +159,10 @@ describe('formatIssueBody', () => {
       linkedPrs: new Set([123, 246, 369]),
     };
 
-    expect(formatIssueBody(issueBody)).toEqual(description);
+    assertEquals(formatIssueBody(issueBody), description);
   });
 
-  test('issue with description before linked PRs', () => {
+  it('issue with description before linked PRs', () => {
     const description = issueDescription(`
       Some multiline
       description
@@ -179,10 +178,10 @@ describe('formatIssueBody', () => {
       linkedPrs: new Set([123, 246, 369]),
     };
 
-    expect(formatIssueBody(issueBody)).toEqual(description);
+    assertEquals(formatIssueBody(issueBody), description);
   });
 
-  test('issue with description after linked PRs', () => {
+  it('issue with description after linked PRs', () => {
     const description = issueDescription(`
       \`\`\`[tasklist]
       ### Linked PRs:
@@ -198,10 +197,10 @@ describe('formatIssueBody', () => {
       linkedPrs: new Set([123, 246, 369]),
     };
 
-    expect(formatIssueBody(issueBody)).toEqual(description);
+    assertEquals(formatIssueBody(issueBody), description);
   });
 
-  test('issue with description before and after linked PRs', () => {
+  it('issue with description before and after linked PRs', () => {
     const description = issueDescription(`
       Some multiline
       description
@@ -220,6 +219,6 @@ describe('formatIssueBody', () => {
       linkedPrs: new Set([123, 246, 369]),
     };
 
-    expect(formatIssueBody(issueBody)).toEqual(description);
+    assertEquals(formatIssueBody(issueBody), description);
   });
 });

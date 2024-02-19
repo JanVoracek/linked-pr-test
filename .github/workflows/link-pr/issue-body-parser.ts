@@ -40,7 +40,7 @@ export function parseIssueBody(issueBody: string): IssueBody {
 }
 
 export function formatIssueBody(issue: IssueBody): string {
-  const sortedPrs = [...issue.linkedPrs].sort((a, b) => a - b);
+  const sortedPrs = [...issue.linkedPrs].sort();
   const linkedPrs = sortedPrs.map(pr => `- [ ] #${pr}`);
 
   const issueParts = [

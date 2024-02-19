@@ -1,7 +1,7 @@
-import type github from '@actions/github';
-import { retry, handleWhen } from 'cockatiel';
-import { RequestError } from '@octokit/request-error';
-import { parseIssueBody, formatIssueBody } from './issue-body-parser';
+import type github from 'npm:@actions/github@6.0.0';
+import { retry, handleWhen } from 'npm:cockatiel@3.1.2';
+import { RequestError } from 'npm:@octokit/request-error@5.0.1';
+import { parseIssueBody, formatIssueBody } from './issue-body-parser.ts';
 
 type Octokit = ReturnType<typeof github.getOctokit>;
 type Repo = typeof github.context.repo;

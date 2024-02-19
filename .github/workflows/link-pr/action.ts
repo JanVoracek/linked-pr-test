@@ -1,5 +1,5 @@
-import github from '@actions/github';
-import { IssuePullRequestLinker } from './issue-pull-request-linker';
+import github from 'npm:@actions/github@6.0.0';
+import { IssuePullRequestLinker } from './issue-pull-request-linker.ts';
 
 const pr = github.context.payload.pull_request!;
 const changes = github.context.payload.changes;
@@ -26,15 +26,15 @@ const previousIssueNumber = parseInt(changes?.body?.from?.match(issueReferencePa
 
 if (!issueNumber && !previousIssueNumber) {
   console.log('Issue number not found in the pull request description.');
-  process.exit(0);
+  Deno.exit(0);
 }
 
 if (issueNumber === previousIssueNumber) {
   console.log('Issue number did not change.');
-  process.exit(0);
+  Deno.exit(0);
 }
 
-const octokit = github.getOctokit(process.env.GITHUB_TOKEN!);
+const octokit = github.getOctokit(Deno.env.get('GITHUB_TOKEN')!);
 const issuePrLinker = new IssuePullRequestLinker(octokit, github.context.repo);
 
 if (previousIssueNumber) {

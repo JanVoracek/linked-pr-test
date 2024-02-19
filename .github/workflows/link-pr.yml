@@ -17,5 +17,5 @@ jobs:
       - name: Update issue
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: deno run --allow-net action.ts
+        run: deno run --allow-net --allow-env action.ts
         working-directory: .github/workflows/link-pr
