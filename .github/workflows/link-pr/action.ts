@@ -34,7 +34,7 @@ if (issueNumber === previousIssueNumber) {
   Deno.exit(0);
 }
 
-console.log(Deno.env.toObject())
+console.log(Deno.readTextFileSync('/home/runner/work/_temp/_github_workflow/event.json'));
 const octokit = github.getOctokit(Deno.env.get('GITHUB_TOKEN')!);
 const issuePrLinker = new IssuePullRequestLinker(octokit, github.context.repo);
 
