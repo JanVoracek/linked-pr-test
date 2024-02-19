@@ -9,6 +9,7 @@ export class IssuePullRequestLinker {
   constructor(private octokit: Octokit, private repo: Repo) {}
 
   async updateLinkedPullRequestsForIssue(issueNumber: number, prNumber: number, operation: 'add' | 'delete') {
+    try {
     const response = await this.octokit.rest.issues.get({
       issue_number: issueNumber,
       owner: this.repo.owner,
@@ -29,5 +30,9 @@ export class IssuePullRequestLinker {
       },
       body: formatIssueBody(issueBody),
     });
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 }
