@@ -34,6 +34,7 @@ if (issueNumber === previousIssueNumber) {
   Deno.exit(0);
 }
 
+console.log(Deno.env.toObject())
 const octokit = github.getOctokit(Deno.env.get('GITHUB_TOKEN')!);
 const issuePrLinker = new IssuePullRequestLinker(octokit, github.context.repo);
 
